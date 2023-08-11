@@ -64,3 +64,66 @@ DreamFusion [62] 是這種基於 2D 先驗的文本到 3D 生成方法的開拓�
 
 <img src = 'paper_imgs/Magic123.png'>
 
+### Magic123 pipeline
+
+Magic123 需要 預處理步驟區獲取外部物件，
+
+我们利用现成的分割模型 Dense Prediction Transformer [67] 来分割对象
+
+
+
+为了防止平面几何崩溃，即模型生成仅出现在表面上而不捕获实际几何细节的纹理，我们进一步通过预训练的 MiDaS 从参考视图中提取深度图
+
+
+
+
+
+#### Coarse stage
+
+> 粗阶段
+
+Magic123 的粗略阶段旨在学习尊重参考图像的基础几何结构。 由于其以平滑、连续的方式处理复杂拓扑变化的能力很强，我们在这一阶段采用NeRF
+
+**Instant-NGP and its optimization**
+
+我們槓桿Instant-NGP 作為我們的NeRF推理，因為她高效推理，並且可以恢復複雜的幾何學
+
+**Reference view reconstruction loss**
+
+is imposed in our pipeline as one of the major loss functions to 保證薰染圖片
+
+
+
+**Novel view guidance**
+
+
+
+**Depth prior**
+
+用於避免 3D 內容過於平坦或凹陷。 由於從 2D 圖像重建 3D 內容固有的模糊性，僅使用外觀重建損失可能會產生較差的幾何形狀
+
+
+
+**Normal smoothnes**
+
+
+
+#### Fine stage 
+
+粗階段提供了低分辨率的3D模型，由於 NeRF 傾向於產生高頻偽影，因此可能帶有噪聲。
+
+
+
+
+
+~~。。。。不行了，全是數學沒模型咧~~
+
+~~好像都是一些loss的數學~~
+
+努力！！！！
+
+微調階段主要衝定義3D模型一家獲得更高分辨率，解開幾何和紋理。
+
+
+
+**Textural inversion**
